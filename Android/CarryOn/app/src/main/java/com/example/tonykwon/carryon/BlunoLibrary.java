@@ -115,6 +115,8 @@ public abstract  class BlunoLibrary  extends Activity{
 
     public void onCreateProcess()
     {
+        lastDevice = new LastConnectDeviceAddress(); // init the last device class
+
         if(!initiate())
         {
             Toast.makeText(mainContext, R.string.error_bluetooth_not_supported,
@@ -573,6 +575,46 @@ public abstract  class BlunoLibrary  extends Activity{
             viewHolder.deviceAddress.setText(device.getAddress());
 
             return view;
+        }
+    }
+
+    //Tony
+    private  static LastConnectDeviceAddress lastDevice;
+
+    public void autoScan(){
+        Log.d("autoscan", " function ");
+        mConnectionState = connectionStateEnum.isScanning;
+        scanLeDevice(true);
+
+        boolean autoScanCheck = false;
+        boolean findBluetoothCheck = true;
+        while(findBluetoothCheck){
+            for(int i = 0; i<mLeDeviceListAdapter.getCount() ; i++){
+                scanLeDevice(false);
+                autoScanCheck = true;
+                final BluetoothDevice device = mLeDeviceListAdapter.getDevice(i);
+                if(device == null)
+                    return ;
+
+                mDeviceName = device.getName().toString();
+                mDeviceAddress = device.getAddress().toString();
+
+                if(lastDevice.getName().equals(mDeviceName) && lastDevice.getAddress().equals(mDeviceAddress)){
+                    if(mBluetoothLeService.connect(mDeviceAddress)){
+                        Log.d(TAG, "Connect request success");
+                        mConnectionState = connectionStateEnum.isConnecting;
+                        mHandler.postDelayed(mConnectingOverTimeRunnable,10000);
+                        findBluetoothCheck =false;
+                    }else {
+                        Log.d(TAG, "Connect request fail");
+                        mConnectionState = connectionStateEnum.isToScan;
+                    }
+                }
+            }
+            if(autoScanCheck)
+                scanLeDevice(true);
+
+
         }
     }
 }

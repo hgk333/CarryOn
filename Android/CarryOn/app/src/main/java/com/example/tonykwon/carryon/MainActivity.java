@@ -106,7 +106,16 @@ public class MainActivity extends BlunoLibrary {
             }
         });
 
+        Thread autoScanThread = new Thread(){
+            @Override
+            public void run(){
+                super.run();
+                autoScan();
+            }
 
+        };
+
+        autoScanThread.start();
 
 
 
@@ -155,6 +164,7 @@ public class MainActivity extends BlunoLibrary {
                 break;
             case isToScan:
                 buttonScan.setText("Scan");
+
                 break;
             case isScanning:
                 buttonScan.setText("Scanning");

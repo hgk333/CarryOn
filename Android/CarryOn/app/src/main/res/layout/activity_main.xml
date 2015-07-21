@@ -10,20 +10,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<TextView-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:id="@+id/textView1"/>-->
+    <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/textView1"/>
 
-    <!--<TextView-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:id="@+id/serialReveicedText"-->
-    <!--android:textSize="10sp"-->
-    <!--android:ems="10"-->
-    <!--android:layout_below="@+id/editText2"-->
-    <!--android:layout_alignRight="@+id/editText2"-->
-    <!--android:layout_alignLeft="@+id/editText2"/>-->
+    <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/serialReveicedText"
+    android:textSize="10sp"
+    android:ems="10"
+    android:layout_below="@+id/editText2"
+    android:layout_alignRight="@+id/editText2"
+    android:layout_alignLeft="@+id/editText2"/>
 
 
 

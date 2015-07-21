@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+
+    <TextView
+        android:id ="@+id/weight"
+        android:layout_width="700px"
+        android:layout_height="250px"
+        android:textSize="20sp"
+        android:text="무게 측정"
+        android:textColor="@color/blue"
+        android:background="@drawable/selector"/>
+
+    <TextView
+        android:id ="@+id/alarm"
+        android:layout_width="700px"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/weight"
+        android:text="수하물 알림"
+        android:textColor="@color/blue"
+        android:background="@drawable/selector"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/rssi"
+        android:text="RSSI"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Distance"
+        android:id="@+id/wwwwww"/>
+
+    <ToggleButton
+        android:id="@+id/toggleButton1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Sound"
+        android:textOn="소리끄기"
+        android:textOff="소리켜기"
+        android:layout_below="@+id/weight"/>
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Vibe"
+        android:textOn="진동끄기"
+        android:textOff="진동켜기"
+        android:layout_below="@+id/toggleButton1"/>
+
+    <Button android:id="@+id/registrationButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/registering_message_ready" />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/informationTextView"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registrationProgressBar" />
+
+
+</RelativeLayout>

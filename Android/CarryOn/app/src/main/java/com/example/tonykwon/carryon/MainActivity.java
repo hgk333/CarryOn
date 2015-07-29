@@ -48,7 +48,7 @@ public class MainActivity extends BlunoLibrary {
     private KakaoTalkLinkMessageBuilder mKakaoTalkLinkMessageBuilder;
     private Button kakaoBtn;
 
-
+    Thread autoScanThread;
     Button shareBtn;
 
     private Context mContext;
@@ -106,7 +106,7 @@ public class MainActivity extends BlunoLibrary {
             }
         });
 
-        Thread autoScanThread = new Thread(){
+        autoScanThread = new Thread(){
             @Override
             public void run(){
                 super.run();
@@ -164,6 +164,8 @@ public class MainActivity extends BlunoLibrary {
                 break;
             case isToScan:
                 buttonScan.setText("Scan");
+                if(!autoScanThread.isAlive()) // bluetooth 연결을 한번 해서 끝나면 정지.
+                    autoScanThread.start();
 
                 break;
             case isScanning:
@@ -172,6 +174,8 @@ public class MainActivity extends BlunoLibrary {
             case isDisconnecting:
                 buttonScan.setText("isDisconnecting");
 
+                if(!autoScanThread.isAlive())
+                    autoScanThread.start();
                 break;
             default:
                 break;

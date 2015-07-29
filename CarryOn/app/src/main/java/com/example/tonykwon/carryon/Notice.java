@@ -44,41 +44,19 @@ public class Notice extends Activity {
 
     String TAG;
 
-    BroadcastReceiver receiver;
-
-    Intent intentMyService;
-
-    //GCM 관련 상수
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-
-    private Button mRegistrationButton;
-    private ProgressBar mRegistrationProgressBar;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private TextView mInformationTextView;
-
-
-
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notice);
-
-
 
 
         registerGcm();
 
 
         //사운드 출력 오디오매니저 선언
-        final AudioManager audioManager =  (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 
         Toast.makeText(getApplicationContext(), "수하물알림 뷰", Toast.LENGTH_LONG).show();
-
-
-
 
 
         //경고 다이얼로그
@@ -90,10 +68,6 @@ public class Notice extends Activity {
                 Log.e(TAG, "확인 클릭");
 
                 dialog.dismiss();
-
-
-
-
 
 
             }
@@ -158,69 +132,49 @@ public class Notice extends Activity {
         });
 
 
-
     }
 
 
-
-
-    public void onDestroy(){
-        // 리시버 삭세를 하지 않으면 에러
-
-        Log.d("MpMainActivity", "Service Destroy");
-
-
-
-
-    }
+//    public void onDestroy(){
+//        // 리시버 삭세를 하지 않으면 에러
+//        Log.d("MpMainActivity", "Service Destroy");
+//
+//    }
 
 
     public void registerGcm() {
 
-
-        Log.d("00000000000000000","");
         GCMRegistrar.checkDevice(this);
-
-        Log.d("111111111","");
-     GCMRegistrar.checkManifest(this);
-
-        Log.d("2222222222222","");
-
+        GCMRegistrar.checkManifest(this);
 
         final String regId = GCMRegistrar.getRegistrationId(this);
 
 
-
         if (regId.equals("")) {
-            Log.d("333333333","");
             GCMRegistrar.register(this, "193784586866");
 
-            Log.d("444444444444444", "");
         } else {
-
             Log.e("id", regId);
-
         }
-
 
 
     }
-    public void getGCMRegId() {
-        String PROJECT_ID = "193784586866";
-
-        Log.d("HSE_LOG", "단말기 ID를 등록합니다");
-        GCMRegistrar.checkDevice(this);
-        GCMRegistrar.checkManifest(this);
-        final String MobileDeviceID = GCMRegistrar.getRegistrationId(this);
-        if("".equals(MobileDeviceID)){
-            GCMRegistrar.register(this, PROJECT_ID);
-        }
-        else{
-            //이미 등록 ID를 구해왔음
-            Log.v("HSE_LOG", "Already REGISTERED");
-            GCMRegistrar.unregister(this);
-            GCMRegistrar.register(this, PROJECT_ID);
-        }
-    }
+//
+//    public void getGCMRegId() {
+//        String PROJECT_ID = "193784586866";
+//
+//        Log.d("HSE_LOG", "단말기 ID를 등록합니다");
+//        GCMRegistrar.checkDevice(this);
+//        GCMRegistrar.checkManifest(this);
+//        final String MobileDeviceID = GCMRegistrar.getRegistrationId(this);
+//        if ("".equals(MobileDeviceID)) {
+//            GCMRegistrar.register(this, PROJECT_ID);
+//        } else {
+//            //이미 등록 ID를 구해왔음
+//            Log.v("HSE_LOG", "Already REGISTERED");
+//            GCMRegistrar.unregister(this);
+//            GCMRegistrar.register(this, PROJECT_ID);
+//        }
+//    }
 
 }

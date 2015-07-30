@@ -116,7 +116,6 @@ public class MainActivity extends BlunoLibrary {
 //        autoScanThread.start();
 
 
-
     }
 
 

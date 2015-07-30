@@ -158,6 +158,8 @@ public class Notice extends Activity {
         }
 
 
+
+
     }
 //
 //    public void getGCMRegId() {

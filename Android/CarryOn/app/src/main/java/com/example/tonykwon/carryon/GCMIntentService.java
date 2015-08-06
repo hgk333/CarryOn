@@ -1,136 +1,137 @@
-//package com.example.tonykwon.carryon;
-//
-////GCMÀ» ÀÌ¿ëÇÏ±â À§ÇÑ Å¬·¡½º
-//
-//import android.app.Notification;
-//
-//import android.app.NotificationManager;
-//
-//import android.app.PendingIntent;
-//
-//import android.content.Context;
-//
-//import android.content.Intent;
-//
-//import android.util.Log;
-//import android.widget.Toast;
-//
-//
-//import com.google.android.gcm.GCMBaseIntentService;
-//
-//public class GCMIntentService extends GCMBaseIntentService {
-//
-//
-//
-//    private static void generateNotification(Context context, String message) {
-//
-//
-//        //¾Ë¸²ÀÌ ¿Ã ¶§ ¾ÆÀÌÄÜ
-//        int icon = R.drawable.ic_launcher;
-//
-//        //ÇöÀç ½Ã°£¿¡ ¸ÂÃç ¾Ë¸²
-//        long when = System.currentTimeMillis();
-//
-//
-//
-//
-//        //¾Ë¸² ¸Å´ÏÀú µî·Ï
-//        NotificationManager notificationManager = (NotificationManager) context
-//
-//                .getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//
-//        //¾Ë¸² ¼±¾ğ
-//        Notification notification = new Notification(icon, message, when);
-//
-//
-//        //¾Ë¸² ½Ã Á¦¸ñ
-//        String title = context.getString(R.string.app_name);
-//
-//
-//        //¾Ë¸² Å¬¸¯ ½Ã ¾î¶² ¾×Æ¼ºñÆ¼·Î ³Ñ¾î°¥°ÇÁö, ¿©±â¼­´Â ¼öÇÏ¹° ¾Ë¸² Å¬·¡½º·Î ³Ñ¾î°¡µµ·Ï ÇÔ
-//        Intent notificationIntent = new Intent(context, Notice.class);
-//
-//
-//        //¾×Æ¼ºñÆ¼ ½ºÅÃÀ» Á¦¾î, ½Ì±Û Å¾Àº ¾×Æ¼ºñÆ¼ ÀçÈ°¿ë, Å¬¸®¾îÅ¾Àº ·±Ä¡ÇÏ°íÀÚÇÏ´Â ¾×Æ¼ºñÆ¼°¡
-//        //ÀÌ¹Ì ½ºÅÃ»ó¿¡ Á¸ÀçÇÏ¸é, ÇØ´ç ¾×Æ¼ºñÆ¼ À§ ´Ù¸¥ ¾×Æ¼ºñÆ¼µéÀ» ¸ğµÎ Á¾·á½ÃÄÑÁÜ
-//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//
-//                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//
-//        //ÆĞµùÀÎÅÙµå´Â Æ¯Á¤ ÄÄÆ÷³ÍÆ®°¡ ÀÎÅÙÆ®¸¦ »ı¼ºÇÑ ÈÄ, ÇØ´ç ÀÎÅÙÆ®¸¦ ¹Ù·Î »ç¿ëÇÏ´Â ´ë½Å
-//        //´Ù¸¥ ÄÄÆ÷³ÍÆ®°¡ ÇØ´ç ÀÎÅÙÆ®¸¦ »ç¿ë ÇÒ ¼ö ÀÖµµ·Ï ÇÒ ¶§ »ç¿ë.
-//        //°Ù¿¢Æ¼ºñÆ¼¸¦ »ç¿ëÇÔÀ¸·Î¼­ ÆĞµùÀÎÅÙÆ®¸¦ ¸¸µç´Ù.
-//        PendingIntent intent = PendingIntent.getActivity(context, 0,
-//
-//                notificationIntent, 0);
-//
-//
-//
-//
-//
-//
-//
-//        notification.setLatestEventInfo(context, title, message, intent);
-//
-//
-//
-//        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-//
-//
-//
-//        notificationManager.notify(0, notification);
-//
-//
-//
-//    }
-//
-//
-//
-//    @Override
-//    protected void onError(Context arg0, String arg1) {
-//
-//    }
-//
-//
-//    //¸Ş½ÃÁö¸¦ ´Ù·ç´Â ºÎºĞ
-//    @Override
-//    protected void onMessage(Context context, Intent intent) {
-//
-//
-//
-//        String msg = intent.getStringExtra("msg");
-//
-//        Log.e("getmessage", "getmessage:" + msg);
-//
-//        generateNotification(context,msg);
-//
-//
-//
-//    }
-//
-//
-//
-//
-//
-//
-//    //regId ¶ç¿öÁÖ±â
-//    @Override
-//    protected void onRegistered(Context context, String reg_id) {
-//
-//        Log.e("Key is : ", reg_id);
-//
-//        Toast.makeText(getApplicationContext(), reg_id, Toast.LENGTH_LONG);
-//    }
-//
-//
-//    @Override
-//    protected void onUnregistered(Context arg0, String arg1) {
-//
-//        Log.e("Å°¸¦ Á¦°ÅÇÕ´Ï´Ù.","Á¦°ÅµÇ¾ú½À´Ï´Ù.");
-//
-//    }
-//
-//
-//
-//}
+package com.example.tonykwon.carryon;
+
+//GCMì„ ì´ìš©í•˜ê¸° ìœ„í•œ í´ë˜ìŠ¤
+
+import android.app.Notification;
+
+import android.app.NotificationManager;
+
+import android.app.PendingIntent;
+
+import android.content.Context;
+
+import android.content.Intent;
+
+import android.util.Log;
+import android.widget.Toast;
+
+
+import com.google.android.gcm.GCMBaseIntentService;
+
+public class GCMIntentService extends GCMBaseIntentService {
+
+
+
+    private static void generateNotification(Context context, String message) {
+
+
+        //ì•Œë¦¼ì´ ì˜¬ ë•Œ ì•„ì´ì½˜
+        int icon = R.drawable.ic_launcher;
+
+        //í˜„ì¬ ì‹œê°„ì— ë§ì¶° ì•Œë¦¼
+        long when = System.currentTimeMillis();
+
+
+
+
+        //ì•Œë¦¼ ë§¤ë‹ˆì € ë“±ë¡
+        NotificationManager notificationManager = (NotificationManager) context
+
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        //ì•Œë¦¼ ì„ ì–¸
+        Notification notification = new Notification(icon, message, when);
+
+
+        //ì•Œë¦¼ ì‹œ ì œëª©
+        String title = context.getString(R.string.app_name);
+
+
+        //ì•Œë¦¼ í´ë¦­ ì‹œ ì–´ë–¤ ì•¡í‹°ë¹„í‹°ë¡œ ë„˜ì–´ê°ˆê±´ì§€, ì—¬ê¸°ì„œëŠ” ìˆ˜í•˜ë¬¼ ì•Œë¦¼ í´ë˜ìŠ¤ë¡œ ë„˜ì–´ê°€ë„ë¡ í•¨
+        Intent notificationIntent = new Intent(context, Notice.class);
+
+
+        //ì•¡í‹°ë¹„í‹° ìŠ¤íƒì„ ì œì–´, ì‹±ê¸€ íƒ‘ì€ ì•¡í‹°ë¹„í‹° ì¬í™œìš©, í´ë¦¬ì–´íƒ‘ì€ ëŸ°ì¹˜í•˜ê³ ìí•˜ëŠ” ì•¡í‹°ë¹„í‹°ê°€
+        //ì´ë¯¸ ìŠ¤íƒìƒì— ì¡´ì¬í•˜ë©´, í•´ë‹¹ ì•¡í‹°ë¹„í‹° ìœ„ ë‹¤ë¥¸ ì•¡í‹°ë¹„í‹°ë“¤ì„ ëª¨ë‘ ì¢…ë£Œì‹œì¼œì¤Œ
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        //íŒ¨ë”©ì¸í…ë“œëŠ” íŠ¹ì • ì»´í¬ë„ŒíŠ¸ê°€ ì¸í…íŠ¸ë¥¼ ìƒì„±í•œ í›„, í•´ë‹¹ ì¸í…íŠ¸ë¥¼ ë°”ë¡œ ì‚¬ìš©í•˜ëŠ” ëŒ€ì‹ 
+        //ë‹¤ë¥¸ ì»´í¬ë„ŒíŠ¸ê°€ í•´ë‹¹ ì¸í…íŠ¸ë¥¼ ì‚¬ìš© í•  ìˆ˜ ìˆë„ë¡ í•  ë•Œ ì‚¬ìš©.
+        //ê²Ÿì—‘í‹°ë¹„í‹°ë¥¼ ì‚¬ìš©í•¨ìœ¼ë¡œì„œ íŒ¨ë”©ì¸í…íŠ¸ë¥¼ ë§Œë“ ë‹¤.
+        PendingIntent intent = PendingIntent.getActivity(context, 0,
+
+                notificationIntent, 0);
+
+
+
+
+
+
+
+        notification.setLatestEventInfo(context, title, message, intent);
+
+
+
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+
+        notificationManager.notify(0, notification);
+
+
+
+    }
+
+
+
+    @Override
+    protected void onError(Context arg0, String arg1) {
+
+    }
+
+
+    //ë©”ì‹œì§€ë¥¼ ë‹¤ë£¨ëŠ” ë¶€ë¶„
+    @Override
+    protected void onMessage(Context context, Intent intent) {
+
+
+
+      //  String msg = intent.getStringExtra("msg");
+
+        String msg = "ì•Œë¦¼ì´ ë„ì°©í–ˆìŠµë‹ˆë‹¤";
+        Log.e("getmessage", "getmessage:" + msg);
+
+        generateNotification(context,msg);
+
+
+
+    }
+
+
+
+
+
+
+    //regId ë„ì›Œì£¼ê¸°
+    @Override
+    protected void onRegistered(Context context, String reg_id) {
+
+        Log.e("Key is : ", reg_id);
+
+        Toast.makeText(getApplicationContext(), reg_id, Toast.LENGTH_LONG);
+    }
+
+
+    @Override
+    protected void onUnregistered(Context arg0, String arg1) {
+
+        Log.e("í‚¤ë¥¼ ì œê±°í•©ë‹ˆë‹¤.","ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.");
+
+    }
+
+
+
+}

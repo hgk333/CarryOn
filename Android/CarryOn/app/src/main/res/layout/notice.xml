@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:background="@color/bg">
 
 
@@ -25,27 +28,27 @@
         android:textColor="@color/blue"
         android:background="@drawable/selector"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/rssi"
-        android:text="RSSI"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:id="@+id/rssi"-->
+        <!--android:text="RSSI"/>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Distance"
-        android:id="@+id/wwwwww"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:text="Distance"-->
+        <!--android:id="@+id/wwwwww"/>-->
 
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Sound"
-        android:textOn="소리끄기"
-        android:textOff="소리켜기"
+        android:textOn="SoundOn"
+        android:textOff="SoundOff"
         android:layout_below="@+id/weight"/>
 
     <ToggleButton
@@ -53,20 +56,58 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Vibe"
-        android:textOn="진동끄기"
-        android:textOff="진동켜기"
+        android:textOn="VibeOn"
+        android:textOff="VibeOff"
         android:layout_below="@+id/toggleButton1"/>
 
-    <Button android:id="@+id/registrationButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/registering_message_ready"
-        android:layout_alignBottom="@+id/toggleButton2"/>
 
-    <TextView android:layout_width="wrap_content"
+
+    <!--<TextView android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/informationTextView"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"/>-->
+
+    textView01 = (TextView) findViewById(R.id.textView10);
+
+    progress = (ProgressBar) findViewById(R.id.progress);
+    Button executeBtn = (Button) findViewById(R.id.executeBtn);
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/informationTextView"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:id="@+id/textView10"
+        android:layout_centerInParent="true"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress"
+        android:layout_below="@+id/textView10"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/executeBtn"
+        android:layout_toRightOf="@+id/textView10"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancelBtn"
+        android:layout_toRightOf="@+id/executeBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/cancelBtn"
+        android:id="@+id/bluetooth"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="7dp"
+        android:id="@+id/tetete"/>
 
 
 </RelativeLayout>

@@ -10,83 +10,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:id="@+id/textView1"/>
 
     <TextView
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:id="@+id/serialReveicedText"
-    android:textSize="10sp"
-    android:ems="10"
-    android:layout_below="@+id/editText2"
-    android:layout_alignRight="@+id/editText2"
-    android:layout_alignLeft="@+id/editText2"/>
+        android:id ="@+id/weight"
+        android:layout_width="700px"
+        android:layout_height="250px"
+        android:textSize="20sp"
+        android:text="무게 측정"
+        android:textColor="@color/blue"
+        android:background="@drawable/selector"/>
+
+    <TextView
+        android:id ="@+id/alarm"
+        android:layout_width="700px"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/weight"
+        android:text="수하물 알림"
+        android:textColor="@color/blue"
+        android:background="@drawable/selector"/>
+
+    <!--<TextView-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:id="@+id/textView1"/>-->
+
+    <!--<TextView-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:id="@+id/serialReveicedText"-->
+    <!--android:textSize="10sp"-->
+    <!--android:ems="10"-->
+    <!--android:layout_below="@+id/editText2"-->
+    <!--android:layout_alignRight="@+id/editText2"-->
+    <!--android:layout_alignLeft="@+id/editText2"/>-->
 
 
 
     <!--android:layout_alignRight="@+id/serialSendText"
     android:layout_above="@+id/serialSendText"-->
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/buttonSerialSend"
-        android:layout_toRightOf="@+id/buttonScan"
-        android:text="Send Data"/>
+    <!--<Button-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/buttonSerialSend"-->
+        <!--android:layout_toRightOf="@+id/buttonScan"-->
+        <!--android:text="Send Data"/>-->
 
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/editText2"
-        android:textSize="25sp"
-        android:ems="10"
-        android:layout_below="@+id/serialSendText"
-        android:layout_alignLeft="@+id/serialSendText"
-        android:text="Received Data:"
-        android:layout_marginTop="20dp"/>
+    <!--<TextView-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/editText2"-->
+        <!--android:textSize="25sp"-->
+        <!--android:ems="10"-->
+        <!--android:layout_below="@+id/serialSendText"-->
+        <!--android:layout_alignLeft="@+id/serialSendText"-->
+        <!--android:text="Received Data:"-->
+        <!--android:layout_marginTop="20dp"/>-->
 
-    <EditText
-        android:layout_height="40dp"
-        android:layout_width="310dp"
-        android:id="@+id/serialSendText"
-        android:textSize="20dip"
-        android:ems="10"
-        android:layout_below="@+id/buttonScan"
-        android:text="Data sending Area"
-        android:layout_marginTop="22dp"
-        android:textColor="#999999"
-        android:inputType="text"
-        android:bufferType="editable"
-        android:background="#555555"
-        android:layout_centerHorizontal="true"/>
+    <!--<EditText-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_width="310dp"-->
+        <!--android:id="@+id/serialSendText"-->
+        <!--android:textSize="20dip"-->
+        <!--android:ems="10"-->
+        <!--android:layout_below="@+id/buttonScan"-->
+        <!--android:text="Data sending Area"-->
+        <!--android:layout_marginTop="22dp"-->
+        <!--android:textColor="#999999"-->
+        <!--android:inputType="text"-->
+        <!--android:bufferType="editable"-->
+        <!--android:background="#555555"-->
+        <!--android:layout_centerHorizontal="true"/>-->
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/buttonScan"
-        android:layout_alignLeft="@+id/serialSendText"
+
+        android:layout_below="@+id/weight"
         android:text="Scan"
-        android:layout_alignParentTop="true"/>
+        />
 
 
     <Button android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/buttonScan"
+        android:layout_below="@+id/weight"
         android:id="@+id/zero2"
         android:text="카톡링크"
-        android:layout_alignParentBottom="true"/>
+        />
 
 
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/result_Data"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/blue"
+        android:background="@drawable/selector"/>
+    <!--<TextView-->
+        <!--android:id="@+id/text2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
 
 

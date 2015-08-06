@@ -32,8 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-
-import com.google.android.gcm.GCMRegistrar;
+//
+//import com.google.android.gcm.GCMRegistrar;
 
 public class Notice extends Activity {
 
@@ -49,8 +49,8 @@ public class Notice extends Activity {
         setContentView(R.layout.notice);
 
 
-        registerGcm();
-
+//        registerGcm();
+//
 
         //사운드 출력 오디오매니저 선언
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -142,25 +142,25 @@ public class Notice extends Activity {
 //    }
 
 
-    public void registerGcm() {
-
-        GCMRegistrar.checkDevice(this);
-        GCMRegistrar.checkManifest(this);
-
-        final String regId = GCMRegistrar.getRegistrationId(this);
-
-
-        if (regId.equals("")) {
-            GCMRegistrar.register(this, "193784586866");
-
-        } else {
-            Log.e("id", regId);
-        }
-
-
-
-
-    }
+//    public void registerGcm() {
+//
+//        GCMRegistrar.checkDevice(this);
+//        GCMRegistrar.checkManifest(this);
+//
+//        final String regId = GCMRegistrar.getRegistrationId(this);
+//
+//
+//        if (regId.equals("")) {
+//            GCMRegistrar.register(this, "193784586866");
+//
+//        } else {
+//            Log.e("id", regId);
+//        }
+//
+//
+//
+//
+//    }
 //
 //    public void getGCMRegId() {
 //        String PROJECT_ID = "193784586866";

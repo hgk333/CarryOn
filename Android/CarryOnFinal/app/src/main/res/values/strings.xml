@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">CarryOn</string>
+
+    <string name="bluetoothToNext">블루투스 연결 가정 후 넘어가려면 클릭</string>
+
+    <string name="bluetooth">Bluetooth</string>
+    <string name="imageView01"> imageView01</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string><string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string><string name="title_devices">BLE Device Scan</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="action_settings">Action settings</string>
+    <string name="katalklink">카톡링크</string>
+    <string-array name="items_share">
+        <item>"카카오톡"</item>
+        <item>메세지</item>
+        <item>이메일</item>
+    </string-array>
+
+    <string-array name="items_share_pic">
+        <item>icon</item>
+        <item>icon</item>
+        <item>icon</item>
+    </string-array>
+
+    <string name="registering_message_ready">InstanceID 토큰 가져오기</string>
+    <string name="registering_message_generating">InstanceID 토큰 생성중...</string>
+    <string name="registering_message_complete">완료!</string>
+
+</resources>

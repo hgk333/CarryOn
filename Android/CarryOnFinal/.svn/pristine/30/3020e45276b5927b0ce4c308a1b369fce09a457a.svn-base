@@ -1,0 +1,525 @@
+package com.example.tonykwon.carryon;
+
+//무게측정 액티비티
+
+//무게측정 액티비티
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.util.KakaoParameterException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Vector;
+
+public class MainActivity extends BlunoLibrary {
+    //서버, 팝업 변수
+    private Button btnAlert;
+    Vector<String> vc = new Vector<String>();
+
+    //이것을 기준으로 통신의 경우의 수를 둔다
+    String caseNumber = "ONE";
+
+    //접속할주소
+    private final String urlPath = "http://ec2-52-69-218-238.ap-northeast-1.compute.amazonaws.com/php_mysql_connect.php";
+
+    //스캔버튼
+    private Button buttonScan;
+    private TextView toNotice;
+    private TextView resultData;
+    private TextView serialReceivedText;
+    private EditText serialSendText;
+    private Button buttonSerialSend;
+
+
+        //카카오링크 관련 변수 3개
+    private KakaoLink mKakaoLink;
+    private KakaoTalkLinkMessageBuilder mKakaoTalkLinkMessageBuilder;
+    private Button kakaoBtn;
+
+    //기준 무게
+    final int MAXIMUMWEIGHT = 10;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        //디바이스 관련 메소
+        onCreateProcess();                                                        //onCreate Process by BlunoLibrary
+
+
+        //카카오링크 관련 초기화 및 연결, 메시지보내기 함수
+        InitKakaoLink();
+        kakaoBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SendKakaoMessage();
+            }
+        });
+
+
+        // 밑에 나머진 형한테 받은 그대로...
+        serialBegin(115200);                                                    //set the Uart Baudrate on BLE chip to 115200
+
+
+//        serialReceivedText = (TextView) findViewById(R.id.serialReveicedText);    //initial the EditText of the received data
+//        serialSendText = (EditText) findViewById(R.id.serialSendText);            //initial the EditText of the sending data
+//
+//        buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend);        //initial the button for sending the data
+//        buttonSerialSend.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//
+//                serialSend(serialSendText.getText().toString());                //send the data to the BLUNO
+//            }
+//        });
+
+        toNotice = (TextView) findViewById(R.id.alarm);
+        toNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Notice.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        });
+
+        buttonScan = (Button) findViewById(R.id.buttonScan);                    //initial the button for scanning the BLE device
+        buttonScan.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device
+
+            }
+        });
+
+//        //자동연결 쓰레드
+//        Thread autoScanThread = new Thread(){
+//            @Override
+//            public void run(){
+//                super.run();
+//                autoScan();
+//            }
+//
+//        };
+//
+//        autoScanThread.start();
+
+
+        // 우철의 서버와 팝업 통신
+        new HttpTask().execute();
+
+        btnAlert = (Button) findViewById(R.id.PopUp_btn);
+        btnAlert.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertBuilder.setTitle("항공사를 선택하세요.");
+
+                // List Adapter 생성
+                final ArrayAdapter<String> adapter =
+                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
+
+                for(int i=0; i<vc.size(); i++) {
+                    adapter.add(vc.get(i));
+                }
+
+                new HttpTask().execute();
+
+                // 버튼 생성
+                alertBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        new HttpTask().execute();
+                        caseNumber = "ONE";
+
+                        dialog.dismiss();
+                    }
+                });
+
+                // Adapter 셋팅
+                alertBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        // AlertDialog 안에 있는 AlertDialog
+                        AlertDialog.Builder innBuilder = new AlertDialog.Builder(MainActivity.this);
+                        innBuilder.setTitle("도착지를 선택하세요.");
+
+                        // List Adapter 생성
+                        final ArrayAdapter<String> adapter2 =
+                                new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
+
+                        for(int i=0; i<vc.size(); i++) {
+                            adapter2.add(vc.get(i));
+                        }
+
+                        // Adapter 셋팅
+                        innBuilder.setAdapter(adapter2, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                // AlertDialog 안에 있는 AlertDialog
+                                String strName = adapter2.getItem(id);
+                                AlertDialog.Builder innBuilder2 = new AlertDialog.Builder(MainActivity.this);
+                                innBuilder2.setMessage(strName);
+                                innBuilder2.setTitle("수하물 기준 무게입니다.");
+
+                                // List Adapter 생성
+                                final ArrayAdapter<String> adapter =
+                                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
+
+
+                                for(int i=0; i<vc.size(); i++) {
+                                    adapter.add(vc.get(i));
+                                }
+
+
+
+
+
+
+
+
+                                innBuilder2.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        new HttpTask().execute();
+                                        caseNumber = "ONE";
+
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                new HttpTask().execute();
+
+                                innBuilder2.show();
+                            }
+                        });
+
+
+
+                        innBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                new HttpTask().execute();
+                                caseNumber = "ONE";
+
+                                dialog.dismiss();
+                            }
+                        });
+
+
+                        innBuilder.show();
+                    }
+                });
+
+                alertBuilder.show();
+
+
+            }
+        });
+
+    }
+
+
+
+
+
+    protected void onResume() {
+        super.onResume();
+        System.out.println("BlUNOActivity onResume");
+        onResumeProcess();                                                        //onResume Process by BlunoLibrary
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        onActivityResultProcess(requestCode, resultCode, data);                    //onActivityResult Process by BlunoLibrary
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onPauseProcess();                                                        //onPause Process by BlunoLibrary
+    }
+
+    protected void onStop() {
+        super.onStop();
+        onStopProcess();                                                        //onStop Process by BlunoLibrary
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onDestroyProcess();                                                        //onDestroy Process by BlunoLibrary
+    }
+
+    //상태에 따른 버튼 메시지
+    @Override
+    public void onConectionStateChange(connectionStateEnum theConnectionState) {//Once connection state changes, this function will be called
+        switch (theConnectionState) {                                            //Four connection state
+            case isConnected:
+                buttonScan.setText("Connected");
+                break;
+            case isConnecting:
+                buttonScan.setText("Connecting");
+                break;
+            case isToScan:
+                buttonScan.setText("Scan");
+
+                break;
+            case isScanning:
+                buttonScan.setText("Scanning");
+                break;
+            case isDisconnecting:
+                buttonScan.setText("isDisconnecting");
+
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    //디바이스로부터 데이터 스트링을 받았을 때때
+
+    @Override
+    public void onSerialReceived(String theString) {                            //Once connection data received, this function will be called
+//        // TODO Auto-generated method stub
+//        serialReceivedText.append(theString);                     //append the text into the EditText
+//        //The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.
+
+        // TODO Auto-generated method stub
+        //serialReceivedText.append(theString);                     //append the text into the EditText
+        //The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.
+
+
+
+        Log.d("STRING_VALUE : ", ""+theString);
+        String stringWeight;
+        double weight = 0;
+
+
+        //serialReceivedText.append(theString);
+
+        int checkString = theString.indexOf('=');
+
+        stringWeight=theString.substring(checkString+1);
+        weight= Double.parseDouble(stringWeight);
+
+        resultData = (TextView) findViewById(R.id.result_Data);
+        resultData.setText(stringWeight);
+
+        if(MAXIMUMWEIGHT == 0)
+            serialSend("103");
+        else if (weight > MAXIMUMWEIGHT)
+            serialSend("100"); //red
+        else if (weight > MAXIMUMWEIGHT - 3)
+            serialSend("101"); //yellow
+        else
+            serialSend("102"); // green
+    }
+
+    //카톡링크 초기화
+    private void InitKakaoLink() {
+        try {
+            mKakaoLink = KakaoLink.getKakaoLink(this);
+            mKakaoTalkLinkMessageBuilder = mKakaoLink.createKakaoTalkLinkMessageBuilder();
+            kakaoBtn = (Button) findViewById(R.id.zero2);
+
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //카톡링크 메시지보내기
+    private void SendKakaoMessage() {
+        try {
+            mKakaoTalkLinkMessageBuilder.addText("신우철의 카카오링크");
+            mKakaoTalkLinkMessageBuilder.addImage("http://dn.api1.kage.kakao.co.kr/14/dn/btqaWmFftyx/tBbQPH764Maw2R6IBhXd6K/o.jpg", 128, 128);
+            mKakaoTalkLinkMessageBuilder.addAppButton("캐리온으로 이동", new AppActionBuilder().setUrl("http://www.naver.com").build());
+            mKakaoLink.sendMessage(mKakaoTalkLinkMessageBuilder.build(), this);
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+    // 서버의 디비와 통신.
+    class HttpTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            try{
+                HttpPost request = new HttpPost(urlPath);
+                Vector<NameValuePair> nameValue = new Vector<NameValuePair>();
+
+                switch(caseNumber) {
+                    //전달할 인자들
+                    case "ONE":
+                        nameValue.add(new BasicNameValuePair("caseNumber", caseNumber));
+
+                        break;
+                    case "TWO":
+                        nameValue.add(new BasicNameValuePair("caseNumber", caseNumber));
+                        nameValue.add(new BasicNameValuePair("airport_name", "Asiana"));
+                        nameValue.add(new BasicNameValuePair("start", "kim-po"));
+
+                        break;
+                    case "THREE":
+                        nameValue.add(new BasicNameValuePair("caseNumber", caseNumber));
+                        nameValue.add(new BasicNameValuePair("airport_name", "Asiana"));
+                        nameValue.add(new BasicNameValuePair("start", "kim-po"));
+                        nameValue.add(new BasicNameValuePair("finish", "hong-hong"));
+
+                        break;
+                }
+
+                //웹 접속 - utf-8 방식으로
+                HttpEntity enty = new UrlEncodedFormEntity(nameValue, "UTF-8");
+                request.setEntity(enty);
+
+                HttpClient client = new DefaultHttpClient();
+                HttpResponse res = client.execute(request);
+
+                //웹 서버에서 값받기
+                HttpEntity entityResponse = res.getEntity();
+                InputStream im = entityResponse.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(im, "UTF-8"));
+
+                String total = "";
+                String tmp = "";
+
+                //버퍼에있는거 전부 더해주기
+                //readLine -> 파일내용을 줄 단위로 읽기
+                while ((tmp = reader.readLine()) != null) {
+                    if (tmp != null) {
+                        total += tmp;
+                    }
+                }
+
+                im.close();
+
+                return total;
+            }catch(UnsupportedEncodingException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            //오류시 null 반환
+            return null;
+        }
+
+        //asyncTask 3번째 인자와 일치 매개변수값 -> doInBackground 리턴값이 전달됨
+        //AsynoTask 는 preExcute - doInBackground - postExecute 순으로 자동으로 실행됩니다.
+        //ui는 여기서 변경
+        protected void onPostExecute(String value){
+            super.onPostExecute(value);
+
+            try{
+                JSONArray jArray = new JSONArray(value);
+
+                switch(caseNumber) {
+                    case "ONE":
+                        String[] jsonName1 = {"AirportName"};
+
+                        JSONObject json1 = null;
+                        vc.clear();
+
+                        for(int i=0; i<jArray.length(); i++){
+                            json1 = jArray.getJSONObject(i);
+                            if(json1 != null){
+                                for(int j=0; j< jsonName1.length; j++){
+
+                                    vc.add(json1.getString(jsonName1[j]));
+                                }
+                            }
+                        }
+                        caseNumber = "TWO";
+                        break;
+
+                    case "TWO":
+                        String[] jsonName2 = {"Finish"};
+
+                        JSONObject json2 = null;
+                        vc.clear();
+
+                        for(int i=0; i<jArray.length(); i++){
+                            json2 = jArray.getJSONObject(i);
+                            if(json2 != null){
+                                for(int j=0; j< jsonName2.length; j++){
+
+                                    vc.add(json2.getString(jsonName2[j]));
+                                }
+                            }
+                        }
+                        caseNumber = "THREE";
+                        break;
+
+                    case "THREE":
+                        String[] jsonName3 = {"Weight"};
+
+                        JSONObject json3 = null;
+                        vc.clear();
+
+                        for(int i=0; i<jArray.length(); i++){
+                            json3 = jArray.getJSONObject(i);
+                            if(json3 != null){
+                                for(int j=0; j< jsonName3.length; j++){
+
+
+                                    vc.add(json3.getString(jsonName3[j]));
+                                }
+                            }
+                        }
+                        caseNumber = "ONE";
+                        break;
+                }
+
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+}
+

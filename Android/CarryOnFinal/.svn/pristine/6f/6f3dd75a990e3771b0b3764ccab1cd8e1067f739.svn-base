@@ -1,0 +1,393 @@
+package com.example.tonykwon.carryon;
+
+//수하물알림 클래스
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.nfc.Tag;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+import android.os.AsyncTask;
+import android.view.View.OnClickListener;
+
+
+public class Notice extends Activity {
+
+    //무게측정 액티비티로 넘어갈 수 있게 하는 버튼
+    TextView backToMain;
+    //블루투스 얻기
+    private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
+
+
+    Button Test;
+
+    //어싱크테스크
+    TextView textView10;
+
+    BackgroundTask task;
+    int value;
+
+    String TAG;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.notice);
+
+
+
+
+
+
+
+//        Set<BluetoothDevice> pairedDevices = BTAdapter.getBondedDevices();
+//        if (pairedDevices.size() > 0) {
+//            for (BluetoothDevice device : pairedDevices) {
+//                mArrayList.add(device.getName() + "\n" + device.getAddress());
+//                Log.d(TAG, "" + mArrayList);
+//                Log.e("bbbbbbbbbbb","");
+//            }
+//        }
+//        else{
+//            Log.e("aaaaaaaaaaaaaaaa","");
+//        }
+//
+//        BTAdapter.startDiscovery();
+//
+//        registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+
+//        //자동연결 쓰레드
+//        Thread autoScanThread = new Thread(){
+//            @Override
+//            public void run(){
+//                super.run();
+//                autoScan();
+//            }
+//
+//        };
+//
+//        autoScanThread.start();
+
+
+        //  registerGcm();
+
+
+        //사운드 출력 오디오매니저 선언
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+
+        Toast.makeText(getApplicationContext(), "수하물알림 뷰", Toast.LENGTH_LONG).show();
+
+
+        //경고 다이얼로그
+        new AlertDialog.Builder(this).setMessage("거리와 장애물에 따라 신호가 달라질 수 있습니다").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                Log.e(TAG, "확인 클릭");
+
+                dialog.dismiss();
+
+
+
+            }
+        }).show();
+
+        textView10 = (TextView) findViewById(R.id.textView10);
+
+        Button executeBtn = (Button) findViewById(R.id.executeBtn);
+
+        executeBtn.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View v) {
+
+                // 새로운 Task 객체를 만들고 실행
+
+                task = new BackgroundTask();
+
+                task.execute(100);
+
+            }
+
+        });
+
+        // 취소 버튼 이벤트 처리
+
+        Button cancelBtn = (Button) findViewById(R.id.cancelBtn);
+
+        cancelBtn.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View v) {
+
+                task.cancel(true);
+
+            }
+
+        });
+
+        //   RSSI 버튼 이벤트 : 블루투스 찾기
+//        Button button = (Button) findViewById(R.id.rssi);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//
+//
+//
+//            }
+//        });
+
+        //메인메뉴로 돌아가기
+        backToMain = (TextView) findViewById(R.id.weight);
+        backToMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Notice.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        });
+
+
+        //핸드폰 소리, 진동 설정 클릭이벤트
+        final ToggleButton TB1 = (ToggleButton) this.findViewById(R.id.toggleButton1);
+        TB1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (TB1.isChecked()) {
+                    TB1.setTextColor(Color.BLACK);
+
+                  //  audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+
+
+                } else {
+                    TB1.setTextColor(Color.BLACK);
+                   // audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    Log.d(TAG, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+
+                }
+            }
+        });
+        final ToggleButton TB2 = (ToggleButton) this.findViewById(R.id.toggleButton2);
+        TB2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (TB2.isChecked()) {
+                    TB2.setTextColor(Color.BLACK);
+
+
+                  //  audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                } else {
+                    TB2.setTextColor(Color.BLACK);
+
+                   // audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                }
+            }
+        });
+
+//        TB2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//            }
+//        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d("11111111111111","");
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
+                TextView rssi_msg = (TextView) findViewById(R.id.tetete);
+                rssi_msg.setText(rssi_msg.getText() + name + " => " + rssi + "dBm\n");
+                Log.d(TAG, "rssi : " + rssi);
+            }
+        }
+    };
+
+
+
+
+
+//    public void onDestroy(){
+//        // 리시버 삭세를 하지 않으면 에러
+//        Log.d("MpMainActivity", "Service Destroy");
+//
+//    }
+
+//
+//    public void registerGcm() {
+//
+//        GCMRegistrar.checkDevice(this);
+//        GCMRegistrar.checkManifest(this);
+//
+//        final String regId = GCMRegistrar.getRegistrationId(this);
+//
+//
+//        if (regId.equals("")) {
+//            GCMRegistrar.register(this, "193784586866");
+//
+//        } else {
+//            Log.e("id", regId);
+//        }
+//
+//
+//    }
+//
+//    public void getGCMRegId() {
+//        String PROJECT_ID = "193784586866";
+//
+//        Log.d("HSE_LOG", "단말기 ID를 등록합니다");
+//        GCMRegistrar.checkDevice(this);
+//        GCMRegistrar.checkManifest(this);
+//        final String MobileDeviceID = GCMRegistrar.getRegistrationId(this);
+//        if ("".equals(MobileDeviceID)) {
+//            GCMRegistrar.register(this, PROJECT_ID);
+//        } else {
+//            //이미 등록 ID를 구해왔음
+//            Log.v("HSE_LOG", "Already REGISTERED");
+//            GCMRegistrar.unregister(this);
+//            GCMRegistrar.register(this, PROJECT_ID);
+//        }
+//    }
+
+    /**
+
+     * 새로운 Task 객체를 정의
+
+     */
+
+    class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
+
+        protected void onPreExecute() {
+
+            value = 0;
+
+
+        }
+
+
+        protected Integer doInBackground(Integer... values) {
+
+            while (isCancelled() == false) {
+
+                int flag = 1;
+
+//                Log.d("00000000000000","");
+//                value=100;
+//                Log.d("1111111111111111", "");
+
+                registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
+//            if(BTAdapter.isDiscovering()){
+//                BTAdapter.cancelDiscovery();
+//            }
+                BTAdapter.startDiscovery();
+//                Log.d("2222222222222", "");
+//                Log.d("333333333333333", "");
+                if (flag == 0) {
+
+                    break;
+
+                } else {
+
+
+                //    Log.d("444444444444", "");
+                    publishProgress(value);
+
+                }
+
+
+
+                try {
+
+                    Thread.sleep(100);
+
+                } catch (InterruptedException ex) {
+                }
+
+            }
+
+
+
+            return value;
+
+        }
+
+
+        protected void onProgressUpdate(Integer... values) {
+
+
+            textView10.setText("Current Value : " + values[0].toString());
+
+        }
+
+
+
+        protected void onPostExecute(Integer result) {
+
+
+
+            textView10.setText("Finished.");
+
+        }
+
+
+
+        protected void onCancelled() {
+
+
+
+            textView10.setText("Cancelled.");
+
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+
+//        unregisterReceiver(receiver);
+    }
+
+
+
+}
+

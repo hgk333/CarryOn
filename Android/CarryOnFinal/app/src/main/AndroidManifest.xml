@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.tonykwon.carryon" >
+
+    <uses-sdk android:targetSdkVersion="19"
+        android:minSdkVersion="18"/>
+    <!-- Declare this required feature if you want to make the app available to BLE-capable devices only.
+    If you want to make your app available to devices that don't support BLE, you should omit this in the manifest.
+     Instead, determine BLE capability by using PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
+    <uses-feature android:required="true" android:name="android.hardware.bluetooth_le"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_SERVICE" />
+
+
+    <permission android:name="com.example.tonykwon.carryon.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.tonykwon.carryon.permission.C2D_MESSAGE" />
+
+
+    <!-- GCM 받기 -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- GCM을 받으려면 구글 계정 필요 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- 메시지 받을 때 wake up 하기 위해 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- 네트워크 접속 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="CarryOn"
+        android:theme="@android:style/Theme.NoTitleBar" >
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="@string/kakao_scheme" android:host="@string/kakaolink_host" />
+        </activity>
+        <service android:name=".BluetoothLeService" android:enabled="true"/>
+
+        <activity android:name=".MainMenu"></activity>
+        <activity android:name=".BTConnect">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name="Notice"
+            android:launchMode="singleTask"
+            ></activity>
+
+        <meta-data android:name="com.kakao.sdk.AppKey"
+
+            android:value="de11892ccc409b89288b19d4322b9390" />
+
+
+        <!--&lt;!&ndash; [START gcm_receiver] &ndash;&gt;-->
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<category android:name="com.example.tonykwon.carryon" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.example.tonykwon.carryon" />
+            </intent-filter>
+        </receiver>
+
+        <!-- [END gcm_receiver] -->
+
+        <!-- [START gcm_listener_service] -->
+        <!-- [END gcm_listener_service] -->
+
+        <!-- [START instanceId_listener_service] -->
+        <!-- [END instanceId_listener_service] -->
+
+        <!-- [START gcm_registration_service] -->
+        <!-- [END gcm_registration_service] -->
+
+
+    </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+</manifest>

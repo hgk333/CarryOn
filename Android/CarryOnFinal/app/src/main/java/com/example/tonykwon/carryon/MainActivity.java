@@ -384,23 +384,23 @@ public class MainActivity extends BlunoLibrary {
 
 
         if(MAXIMUMWEIGHT == 0) {
-            serialSend("103");
+            serialSend("103\0");
 
             circle.setImageResource(R.drawable.scale_circle);
         }
         else if (weight > MAXIMUMWEIGHT) {
-            serialSend("100"); //red
+            serialSend("100\0"); //red
 
             circle.setImageResource(R.drawable.scale_circle_excess);
 
         }
         else if (weight > MAXIMUMWEIGHT - 3) {
-            serialSend("101"); //yellow
+            serialSend("101\0"); //yellow
 
             circle.setImageResource(R.drawable.scale_circle_danger);
         }
         else {
-            serialSend("102"); // green
+            serialSend("102\0"); // green
 
             circle.setImageResource(R.drawable.scale_circle_under);
         }
